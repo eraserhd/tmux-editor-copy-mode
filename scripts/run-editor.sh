@@ -21,7 +21,7 @@ kak -e "
    write
    set-option buffer readonly true
    set-option window filetype tmux-copy
-   delete-buffer *tmux-copy*
+   try %{ delete-buffer *tmux-copy* }
    rename-buffer *tmux-copy*
    select $cursor
    "
