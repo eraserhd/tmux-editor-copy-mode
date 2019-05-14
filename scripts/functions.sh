@@ -1,3 +1,4 @@
+SCRIPTS_DIR="$(CDPATH= cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
 
 getTmuxOption() {
     local option="$1"
@@ -40,25 +41,23 @@ getPaneProperties() {
     read -r "$@" < <(tmux display-message -t "$pane_id" -p "$format")
 }
 
-countLines() {
-    local file="$1"
-    awk '{line_count+=1}END{print line_count}' "$file"
-}
-
 cursorPosition() {
-    local x y width height lineVar file
+    local vars=() name file
     while (( $# > 0 )); do
         case "$1" in
-            -x) shift; x="$1";;
-            -y) shift; y="$1";;
-            -width) shift; width="$1";;
-            -height) shift; height="$1";;
-            -lineVar) shift; lineVar="$1";;
-            -file) shift; file="$1";;
+            -file)
+                file="$2"
+                shift
+                shift
+                ;;
+            -*)
+                name="${1#-}"
+                value="$2"
+                vars+=( "-v" "${name}=${value}" )
+                shift
+                shift
+                ;;
         esac
-        shift
     done
-
-    local line_count=$(countLines "$file")
-    eval "${lineVar}=$(( line_count - ( height - y ) + 1 ))"
+    eval "$(awk ${vars[@]} -f "${SCRIPTS_DIR}/cursor-position.awk" "${file}")"
 }
