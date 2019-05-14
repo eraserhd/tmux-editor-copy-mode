@@ -10,11 +10,6 @@ getTmuxOption() {
     fi
 }
 
-countLines() {
-    local file="$1"
-    awk '{line_count+=1}END{print line_count}' "$file"
-}
-
 capturePaneContents() {
     local file
     local target
@@ -43,4 +38,27 @@ getPaneProperties() {
     done
     declare -g "$@"
     read -r "$@" < <(tmux display-message -t "$pane_id" -p "$format")
+}
+
+countLines() {
+    local file="$1"
+    awk '{line_count+=1}END{print line_count}' "$file"
+}
+
+computeCursorLine() {
+    local x y width height file
+    while (( $# > 0 )); do
+        case "$1" in
+            -x) shift; x="$1";;
+            -y) shift; y="$1";;
+            -width) shift; width="$1";;
+            -height) shift; height="$1";;
+            -file) shift; file="$1";;
+        esac
+        shift
+    done
+
+    local line_count=$(countLines "$file")
+    local cursor_line=$(( line_count - ( height - y ) + 1 ))
+    printf '%d\n' "$cursor_line"
 }
