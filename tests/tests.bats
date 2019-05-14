@@ -14,4 +14,8 @@ source scripts/functions.sh
 
 @test "cursorLine, when file is longer than pane" {
     [[ 6 = $(cursorLine -file tests/ten-lines.txt -x 0 -y 0 -width 80 -height 5) ]]
+    [[ 7 = $(cursorLine -file tests/ten-lines.txt -x 0 -y 1 -width 80 -height 5) ]]
+}
+
+@test "cursorLine, when lines have wrapped" {
 }
