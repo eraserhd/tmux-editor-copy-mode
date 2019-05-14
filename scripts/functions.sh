@@ -46,19 +46,19 @@ countLines() {
 }
 
 cursorLine() {
-    local x y width height file
+    local x y width height lineVar file
     while (( $# > 0 )); do
         case "$1" in
             -x) shift; x="$1";;
             -y) shift; y="$1";;
             -width) shift; width="$1";;
             -height) shift; height="$1";;
+            -lineVar) shift; lineVar="$1";;
             -file) shift; file="$1";;
         esac
         shift
     done
 
     local line_count=$(countLines "$file")
-    local cursor_line=$(( line_count - ( height - y ) + 1 ))
-    printf '%d\n' "$cursor_line"
+    eval "${lineVar}=$(( line_count - ( height - y ) + 1 ))"
 }
