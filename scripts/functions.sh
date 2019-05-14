@@ -45,7 +45,7 @@ countLines() {
     awk '{line_count+=1}END{print line_count}' "$file"
 }
 
-cursorLine() {
+cursorPosition() {
     local x y width height lineVar file
     while (( $# > 0 )); do
         case "$1" in
