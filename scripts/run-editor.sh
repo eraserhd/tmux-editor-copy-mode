@@ -7,7 +7,7 @@ source "$SCRIPTS_DIR/functions.sh"
 
 file=$(capturePaneContents -t "${pane_id}")
 getPaneProperties cursor_y cursor_x pane_width pane_height
-cursor_line=$(computeCursorLine -file $file -y $cursor_y -x $cursor_x -width $pane_width -height $pane_height)
+cursor_line=$(cursorLine -file $file -y $cursor_y -x $cursor_x -width $pane_width -height $pane_height)
 
 cursor="${cursor_line}.${cursor_x},${cursor_line}.${cursor_x}"
 kak -e "
