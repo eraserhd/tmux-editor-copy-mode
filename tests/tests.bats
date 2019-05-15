@@ -53,3 +53,13 @@ EOF
     [[ vi = $(unset EDITOR; editorType) ]]
     [[ kak = $(EDITOR='/usr/bin/kak --extra' editorType) ]]
 }
+
+@test "getExtraEditorArgs" {
+    EDITOR=rando getExtraEditorArgs
+    [[ 0 = ${#extra_editor_args[@]} ]]
+
+    extra_editor_args=()
+    EDITOR=kak getExtraEditorArgs
+    [[ 2 = ${#extra_editor_args[@]} ]]
+    [[ "-e" = ${extra_editor_args[0]} ]]
+}

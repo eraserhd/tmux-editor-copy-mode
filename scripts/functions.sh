@@ -27,7 +27,12 @@ capturePaneContents() {
         shift
     done
     file=$(mktemp)
-    tmux capture-pane -t "$target" -S- -E- -J -e -p |sed -e "s/[ 	][ 	]*$//" >"$file"
+    local is_alternate=$(tmux display-message -t "$target" '#{alternate_on}')
+    local capture_args=()
+    if [[ $is_alternate = 1 ]]; then
+        capture_args+=( "-a" )
+    fi
+    tmux capture-pane -t "$target" "${capture_args[@]}" -S- -E- -J -e -p |sed -e "s/[ 	][ 	]*$//" >"$file"
     printf '%s\n' "$file"
 }
 
@@ -67,4 +72,34 @@ editorType() {
     editor_type="${editor_type%% *}"
     editor_type="${editor_type##*/}"
     printf '%s\n' "$editor_type"
+}
+
+kakExtraArgs() {
+    declare -g extra_editor_args
+    printf 'huh?' >&2
+    extra_editor_args+=(
+        "-e"
+        "
+           exec gj
+           try %{
+              ansi-render
+           } catch %{
+              exec -draft %{%s\x1B[\d;]+m<ret><a-d>}
+           }
+           write
+           set-option buffer readonly true
+           set-option window filetype tmux-copy
+           try %{ delete-buffer *tmux-copy* }
+           rename-buffer *tmux-copy*
+           add-highlighter buffer/wrap wrap
+           select ${cursor_line}.${cursor_column},${cursor_line}.${cursor_column}
+        "
+    )
+}
+
+getExtraEditorArgs() {
+    local type=$(editorType)
+    if [[ $(type -t "${type}ExtraArgs") = "function" ]]; then
+        ${type}ExtraArgs
+    fi
 }
