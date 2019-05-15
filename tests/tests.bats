@@ -46,3 +46,10 @@ EOF
     [[ 1 = $column ]]
     rm -f "$file"
 }
+
+@test "edtiorType" {
+    [[ kak = $(EDITOR=kak editorType) ]]
+    [[ kak = $(EDITOR=/usr/local/bin/kak editorType) ]]
+    [[ vi = $(unset EDITOR; editorType) ]]
+    [[ kak = $(EDITOR='/usr/bin/kak --extra' editorType) ]]
+}

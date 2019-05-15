@@ -61,3 +61,10 @@ cursorPosition() {
     done
     eval "$(awk ${vars[@]} -f "${SCRIPTS_DIR}/cursor-position.awk" "${file}")"
 }
+
+editorType() {
+    local editor_type="${EDITOR-vi}"
+    editor_type="${editor_type%% *}"
+    editor_type="${editor_type##*/}"
+    printf '%s\n' "$editor_type"
+}
