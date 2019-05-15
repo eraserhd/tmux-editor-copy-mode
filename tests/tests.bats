@@ -41,6 +41,10 @@ EOF
     [[ 1 = $column ]]
     cursorPosition -file "$file" -x 0 -y 2 -width 5 -height 5 -lineVar line -columnVar column
     [[ 3 = $line ]]
+    [[ 6 = $column ]]
+    cursorPosition -file "$file" -x 1 -y 2 -width 5 -height 5 -lineVar line -columnVar column
+    [[ 3 = $line ]]
+    [[ 7 = $column ]]
     cursorPosition -file "$file" -x 0 -y 1 -width 5 -height 5 -lineVar line -columnVar column
     [[ 3 = $line ]]
     [[ 1 = $column ]]
