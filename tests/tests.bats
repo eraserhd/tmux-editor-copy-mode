@@ -18,7 +18,7 @@ source scripts/functions.sh
     [[ 7 = $line ]]
 }
 
-@test "cursorPosition, when lines have wrapped" {
+@test "cursorPosition returns the file line, not the screen line, when lines wrap" {
     skip "not working yet"
     local file=$(mktemp)
     cat >"$file" <<EOF
