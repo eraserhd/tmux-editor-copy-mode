@@ -84,7 +84,7 @@ kakExtraArgs() {
            try %{
               ansi-render
            } catch %{
-              exec -draft %{%s\x1B[\d;]+m<ret><a-d>}
+              exec -draft %{%s\x1B\[[\d;]+m<ret><a-d>}
            }
            write
            set-option buffer readonly true

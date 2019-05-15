@@ -2,6 +2,7 @@ BEGIN{
     screen_line_count = 0;
 }
 {
+    gsub(/\x1B\[[0-9;]*m/, "");
     start_column = 1;
     while (length() > width) {
         file_line[screen_line_count] = NR;

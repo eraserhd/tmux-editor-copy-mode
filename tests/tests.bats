@@ -51,6 +51,20 @@ EOF
     rm -f "$file"
 }
 
+@test "cursorPosition is not confused by ANSI escapes" {
+    local file=$(mktemp)
+    cat >"$file" <<EOF
+a
+b
+12[23m34567
+c
+d
+EOF
+    cursorPosition -file "$file" -x 1 -y 2 -width 5 -height 5 -lineVar line -columnVar column
+    [[ 3 = $line ]]
+    [[ 7 = $column ]]
+}
+
 @test "edtiorType" {
     [[ kak = $(EDITOR=kak editorType) ]]
     [[ kak = $(EDITOR=/usr/local/bin/kak editorType) ]]
