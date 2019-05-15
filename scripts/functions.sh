@@ -32,7 +32,10 @@ capturePaneContents() {
     if [[ $is_alternate -ne 0 ]]; then
         capture_args+=( "-a" )
     fi
-    tmux capture-pane "${capture_args[@]}" -S- -E- -J -e -p |sed -e "s/[ 	][ 	]*$//" >"$file"
+    if keepANSI; then
+        capture_args+=( "-e" )
+    fi
+    tmux capture-pane "${capture_args[@]}" -S- -E- -J -p |sed -e "s/[ 	][ 	]*$//" >"$file"
     printf '%s\n' "$file"
 }
 
@@ -76,7 +79,6 @@ editorType() {
 
 kakExtraArgs() {
     declare -g extra_editor_args
-    printf 'huh?' >&2
     extra_editor_args+=(
         "-e"
         "
@@ -97,9 +99,22 @@ kakExtraArgs() {
     )
 }
 
+kakKeepANSI() {
+    return 0
+}
+
 getExtraEditorArgs() {
     local type=$(editorType)
     if [[ $(type -t "${type}ExtraArgs") = "function" ]]; then
         ${type}ExtraArgs
     fi
+}
+
+keepANSI() {
+    local type=$(editorType)
+    if [[ $(type -t "${type}KeepANSI") = "function" ]]; then
+        ${type}KeepANSI
+        return $?
+    fi
+    return 1
 }
