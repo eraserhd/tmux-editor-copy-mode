@@ -25,6 +25,7 @@ kak -e "
    set-option window filetype tmux-copy
    try %{ delete-buffer *tmux-copy* }
    rename-buffer *tmux-copy*
+   add-highlighter buffer/wrap wrap
    select $cursor
    "
 rm -f "$file"
