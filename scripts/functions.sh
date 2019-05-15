@@ -29,7 +29,7 @@ capturePaneContents() {
     file=$(mktemp)
     local is_alternate=$(tmux display-message -t "$target" '#{alternate_on}')
     local capture_args=( "-t" "$target" )
-    if [[ $is_alternate = 1 ]]; then
+    if [[ $is_alternate -ne 0 ]]; then
         capture_args+=( "-a" )
     fi
     tmux capture-pane "${capture_args[@]}" -S- -E- -J -e -p |sed -e "s/[ 	][ 	]*$//" >"$file"
