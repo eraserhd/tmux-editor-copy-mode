@@ -65,11 +65,27 @@ EOF
     [[ 7 = $column ]]
 }
 
-@test "edtiorType" {
+@test "deduces editor type from the first word of \$EDITOR" {
+    tmux() {
+        [[ "$1" = "show-option" ]] || return 1
+        [[ "$2" = "-gqv" ]] || return 1
+        [[ "$3" = "@editor_copy_mode_type" ]] || return 1
+        printf ':\n';
+    }
     [[ kak = $(EDITOR=kak editorType) ]]
     [[ kak = $(EDITOR=/usr/local/bin/kak editorType) ]]
     [[ vi = $(unset EDITOR; editorType) ]]
     [[ kak = $(EDITOR='/usr/bin/kak --extra' editorType) ]]
+}
+
+@test "editor type can be overridden with @editor_copy_mode_type" {
+    tmux() {
+        [[ "$1" = "show-option" ]] || return 1
+        [[ "$2" = "-gqv" ]] || return 1
+        [[ "$3" = "@editor_copy_mode_type" ]] || return 1
+        printf 'foo\n'
+    }
+    [[ foo = $(EDITOR=kak editorType) ]]
 }
 
 @test "getExtraEditorArgs" {

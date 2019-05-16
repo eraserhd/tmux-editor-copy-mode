@@ -72,9 +72,12 @@ cursorPosition() {
 }
 
 editorType() {
-    local editor_type="${EDITOR-vi}"
-    editor_type="${editor_type%% *}"
-    editor_type="${editor_type##*/}"
+    local editor_type="$(getTmuxOption '@editor_copy_mode_type' ':')"
+    if [[ $editor_type = : ]]; then
+        editor_type="${EDITOR-vi}"
+        editor_type="${editor_type%% *}"
+        editor_type="${editor_type##*/}"
+    fi
     printf '%s\n' "$editor_type"
 }
 
