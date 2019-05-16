@@ -1,4 +1,5 @@
 SCRIPTS_DIR="$(CDPATH= cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
+source "$SCRIPTS_DIR/editors.sh"
 
 getTmuxOption() {
     local option="$1"
@@ -75,32 +76,6 @@ editorType() {
     editor_type="${editor_type%% *}"
     editor_type="${editor_type##*/}"
     printf '%s\n' "$editor_type"
-}
-
-kakExtraArgs() {
-    declare -g extra_editor_args
-    extra_editor_args+=(
-        "-e"
-        "
-           exec gj
-           try %{
-              ansi-render
-           } catch %{
-              exec -draft %{%s\x1B\[[\d;]+m<ret><a-d>}
-           }
-           write
-           set-option buffer readonly true
-           set-option window filetype tmux-copy
-           try %{ delete-buffer *tmux-copy* }
-           rename-buffer *tmux-copy*
-           add-highlighter buffer/wrap wrap
-           select ${cursor_line}.${cursor_column},${cursor_line}.${cursor_column}
-        "
-    )
-}
-
-kakKeepANSI() {
-    return 0
 }
 
 getExtraEditorArgs() {
