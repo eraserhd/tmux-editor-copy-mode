@@ -11,6 +11,7 @@ kakExtraArgs() {
            } catch %{
               exec -draft %{%s\x1B\[[\d;]+m<ret><a-d>}
            }
+           try %{ exec -draft '%s\h$<ret><a-d>' }
            write
            set-option buffer readonly true
            set-option window filetype tmux-copy
